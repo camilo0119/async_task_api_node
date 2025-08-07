@@ -273,7 +273,7 @@ Este proyecto está licenciado bajo la Licencia MIT - ver el archivo [LICENSE](L
 ## 👥 Equipo de Desarrollo
 
 **CBW Development Team**
-- Email: dev@cbw.com
+- Email: camilo0119@gmail.com
 - Repositorio: [GitHub](https://github.com/cbw/task-management)
 
 ---
