@@ -9,9 +9,9 @@ export class TaskController {
   private taskService: TaskService;
   private queueService: QueueService;
 
-  constructor() {
+  constructor(queueService: QueueService) {
     this.taskService = new TaskService();
-    this.queueService = new QueueService();
+    this.queueService = queueService;
   }
 
   createTask = async (req: Request, res: Response): Promise<void> => {

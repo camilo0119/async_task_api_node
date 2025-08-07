@@ -6,13 +6,12 @@ import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import swaggerUi from 'swagger-ui-express';
 import { connectDatabase } from './config/database';
-import { connectRedis } from './config/redis';
-import { taskRoutes } from './routes/taskRoutes';
 import { errorHandler } from './middleware/errorHandler';
 import { requestLogger } from './middleware/requestLogger';
 import { swaggerSpec } from './config/swagger';
 import { logger } from './utils/logger';
 import { config } from './config/config';
+import { initTaskRoutes } from './routes/taskRoutes';
 
 const app = express();
 
@@ -48,9 +47,6 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Rutas de la API
-app.use('/api/v1', taskRoutes);
-
 // Manejo de rutas no encontradas
 app.use('*', (req, res) => {
   res.status(404).json({
@@ -65,11 +61,12 @@ app.use(errorHandler);
 // Función para inicializar la aplicación
 async function startServer(): Promise<void> {
   try {
+
+    const taskRoutes = await initTaskRoutes();
+    app.use('/api/v1', taskRoutes);
+
     // Conectar a MongoDB
     await connectDatabase();
-    
-    // Conectar a Redis
-    await connectRedis();
     
     // Iniciar servidor
     const server = app.listen(config.PORT, () => {

@@ -2,9 +2,9 @@ import Redis, { RedisOptions } from 'ioredis';
 import { config } from './config';
 import { logger } from '../utils/logger';
 
-let redis: Redis;
+let redis: Redis | null = null;
 
-export async function connectRedis(): Promise<void> {
+async function connectRedis(): Promise<void> {
   try {
     const redisOptions: RedisOptions = {
       host: config.REDIS_HOST,
@@ -38,9 +38,9 @@ export async function connectRedis(): Promise<void> {
   }
 }
 
-export function getRedisConnection(): Redis {
+export async function getRedisConnection(): Promise<Redis> {
   if (!redis) {
-    throw new Error('Redis connection not initialized');
+    await connectRedis();
   }
-  return redis;
+  return redis as Redis;
 }
